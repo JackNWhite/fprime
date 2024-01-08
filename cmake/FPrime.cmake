@@ -12,6 +12,11 @@ include(options)
 include(sanitizers) # Enable sanitizers if they are requested
 include(required)
 
+# Add project root's cmake folder to module path
+if (IS_DIRECTORY "${FPRIME_PROJECT_ROOT}/cmake")
+    list(APPEND CMAKE_MODULE_PATH "${FPRIME_PROJECT_ROOT}/cmake")
+endif()
+
 # Setup fprime library locations
 list(REMOVE_DUPLICATES FPRIME_LIBRARY_LOCATIONS)
 set(FPRIME_BUILD_LOCATIONS "${FPRIME_FRAMEWORK_PATH}" ${FPRIME_LIBRARY_LOCATIONS} "${FPRIME_PROJECT_ROOT}")
@@ -107,16 +112,13 @@ macro(fprime_setup_standard_targets)
         register_fprime_build_autocoder(autocoder/fpp)
         register_fprime_build_autocoder(autocoder/ai_xml)
         register_fprime_build_autocoder(autocoder/packets)
-        register_fprime_target(target/refresh_cache)
         register_fprime_target(target/version)
         register_fprime_target(target/install)
         register_fprime_ut_target(target/ut)
 
         if (FPRIME_ENABLE_UTIL_TARGETS)
-            register_fprime_target(target/impl)
+            register_fprime_target(target/refresh_cache)
             register_fprime_ut_target(target/check)
-            register_fprime_ut_target(target/check_leak)
-            register_fprime_ut_target(target/testimpl)
         endif()
     endif()
 endmacro(fprime_setup_standard_targets)
